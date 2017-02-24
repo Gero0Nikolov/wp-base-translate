@@ -61,12 +61,13 @@ If you want to extend the <strong>functions.php</strong> file, make sure to wrap
 If you want to extend the <strong>WP_BASE_TRANSLATE Core</strong> make sure to add small comment block above each of your functions.
 
 <strong>The code block should look like:</strong>
-
+<pre>
 /*
-/*	Function name: example_function
-/*	Function arguments: $post_id [ INT ]
-/*	Function purpose: This function is just for an example.
+*	Function name: example_function
+*	Function arguments: $post_id [ INT ]
+*	Function purpose: This function is just for an example.
 */
 function example_function( $post_id ) { return "John Snow is alive!"; }
+</pre>
 
 ##That's it!
