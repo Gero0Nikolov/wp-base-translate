@@ -70,4 +70,4 @@ If you want to extend the <strong>WP_BASE_TRANSLATE Core</strong> make sure to a
 function example_function( $post_id ) { return "John Snow is alive!"; }
 </pre>
 
-##That's it!
+###That's it!
