@@ -27,7 +27,7 @@ That's all!
 WP_BASE_TRANSLATE is meant to be easy, so if you currently have a language menu option connected on your website it'll work with it.
 The only requirement for the plugin to work properly is to add <em><strong>lang</strong></em> parameter in your page URL.
 
-<strong>Example:</strong>http://geronikolov.com/stories ---> http://geronikolov.com/stories?lang=es (that will call the Stories page translated in <u>Spanish</u>)
+<strong>Example:</strong>http://geronikolov.com/blog ---> http://geronikolov.com/blog?lang=bg (that will call the Stories page translated in <u>Bulgarian</u>)
 
 ###What happens if I don't have that language implementation in my site?
 WP_BASE_TRANSLATE don't come with built in language listing menu for the front-end, becuase of several reasons:
