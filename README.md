@@ -1,5 +1,5 @@
 #WP_BASE_TRANSLATE
-The Simplest, Freest &amp; OpenSourcest <strong>WordPress plugin</strong> out there!
+The Simplest, Freest &amp; OpenSourcest <strong>WordPress translation plugin</strong> out there!
 
 ##How it works?
 Most of the translation plugins are built in very complicated and messy way...
