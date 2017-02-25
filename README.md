@@ -57,7 +57,7 @@ The <strong>get_registered_languages()</strong> function can be found in the <st
 ##How to contribute?
 You just have to clone the repository and build!
 
-If you want to extend the <strong>functions.php</strong> file, make sure to wrap your <em><strong>new functions</strong></em> in the <strong>if ( !function_exists( "" ) ) {}</strong> statement.
+If you want to extend the <strong>functions.php</strong> file.<br>
 If you want to extend the <strong>WP_BASE_TRANSLATE Core</strong> make sure to add small comment block above each of your functions.
 
 <strong>The code block should look like:</strong>
