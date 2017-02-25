@@ -247,15 +247,17 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function is used to save the language of the current page, when the "Update" button is clicked.
     */
     function action_on_update( $post_id ) {
-        $current_page_language = get_post_meta( $post_id, "page_language", true );
-        if ( empty( $current_page_language ) ) { if ( isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) ) { add_post_meta( $post_id, "page_language", $_POST[ "page_language" ], true ); } }
-        else { update_post_meta( $post_id, "page_language", $_POST[ "page_language" ] ); }
+		$page_language = isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) ? sanitize_text_field( $_POST[ "page_language" ] ) : "";
+
+		$current_page_language = get_post_meta( $post_id, "page_language", true );
+        if ( empty( $current_page_language ) ) { if ( isset( $page_language ) && !empty( $page_language ) ) { add_post_meta( $post_id, "page_language", $page_language, true ); } }
+        else { update_post_meta( $post_id, "page_language", $page_language ); }
 
         if ( $this->get_parent_id( $post_id ) == -1 ) {
-            if ( isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) && $_POST[ "page_language" ] != "none" ) {
-                $this->insert_language_relation( $post_id, $post_id, $_POST[ "page_language" ] );
+            if ( isset( $page_language ) && !empty( $page_language ) && $page_language != "none" ) {
+                $this->insert_language_relation( $post_id, $post_id, $page_language );
             }
-        } else { $this->update_language_relation( $post_id, $_POST[ "page_language" ] ); }
+        } else { $this->update_language_relation( $post_id, $page_language ); }
     }
 
     /*
@@ -264,14 +266,16 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function checks if the given by $page_id Page is connected with another Parent page and returns the Parent page ID.
     */
     function get_parent_id( $page_id ) {
-        global $wpdb;
+		if ( intval( $page_id ) ) {
+	        global $wpdb;
 
-        $page_language_relations = $wpdb->prefix ."page_language_relations";
+	        $page_language_relations = $wpdb->prefix ."page_language_relations";
 
-        $sql_ = "SELECT page_parent_id FROM $page_language_relations WHERE page_id=$page_id LIMIT 1";
-        $result_ = $wpdb->get_results( $sql_, OBJECT );
+	        $sql_ = $wpdb->prepare( "SELECT page_parent_id FROM $page_language_relations WHERE page_id=%d LIMIT 1", $page_id );
+	        $result_ = $wpdb->get_results( $sql_, OBJECT );
 
-        return isset( $result_[ 0 ] ) && !empty( $result_ [ 0 ] ) ? $result_[ 0 ]->page_parent_id : -1;
+	        return isset( $result_[ 0 ] ) && !empty( $result_ [ 0 ] ) ? $result_[ 0 ]->page_parent_id : -1;
+		} else { return false; }
     }
 
     /*
@@ -280,14 +284,18 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function checks if the given by $page_id Page has a child page from the specified $language and returns its ID.
     */
     function get_child_id( $parent_id, $language ) {
-        global $wpdb;
+		if ( intval( $parent_id ) ) {
+			$language = sanitize_text_field( $language );
 
-        $page_language_relations = $wpdb->prefix ."page_language_relations";
+			global $wpdb;
 
-        $sql_ = "SELECT page_id FROM $page_language_relations WHERE page_parent_id=$parent_id AND page_language='$language' LIMIT 1";
-        $result_ = $wpdb->get_results( $sql_, OBJECT );
+	        $page_language_relations = $wpdb->prefix ."page_language_relations";
 
-        return isset( $result_[ 0 ] ) && !empty( $result_[ 0 ] ) ? $result_[ 0 ]->page_id : -1;
+	        $sql_ = $wpdb->prepare( "SELECT page_id FROM $page_language_relations WHERE page_parent_id=%d AND page_language='%s' LIMIT 1", array( $parent_id, $language ) );
+	        $result_ = $wpdb->get_results( $sql_, OBJECT );
+
+	        return isset( $result_[ 0 ] ) && !empty( $result_[ 0 ] ) ? $result_[ 0 ]->page_id : -1;
+		} else { return false; }
     }
 
     /*
@@ -296,18 +304,22 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function generate relation between page translations in the DB.
     */
     function insert_language_relation( $page_id, $parent_id, $language ) {
-        global $wpdb;
+		if ( intval( $page_id ) && intval( $parent_id ) ) {
+			$language = sanitize_text_field( $language );
 
-        $page_language_relations = $wpdb->prefix ."page_language_relations";
+			global $wpdb;
 
-        $wpdb->insert(
-            $page_language_relations,
-            array(
-                "page_id" => $page_id,
-                "page_parent_id" => $parent_id,
-                "page_language" => $language
-            )
-        );
+	        $page_language_relations = $wpdb->prefix ."page_language_relations";
+
+	        $wpdb->insert(
+	            $page_language_relations,
+	            array(
+	                "page_id" => $page_id,
+	                "page_parent_id" => $parent_id,
+	                "page_language" => $language
+	            )
+	        );
+		} else { return false; }
     }
 
     /*
@@ -316,15 +328,19 @@ class WP_BASE_TRANSLATE {
     *   Funciton purpose: This function is used to update the language of the specified by $page_id, Page in the WP_PREFIX_page_language_relations.
     */
     function update_language_relation( $page_id, $language ) {
-        global $wpdb;
+		if ( intval( $page_id ) ) {
+			$language = sanitize_text_field( $language );
 
-        $page_language_relations = $wpdb->prefix ."page_language_relations";
+			global $wpdb;
 
-        $wpdb->update(
-            $page_language_relations,
-            array( "page_language" => $language ),
-            array( "page_id" => $page_id )
-        );
+	        $page_language_relations = $wpdb->prefix ."page_language_relations";
+
+	        $wpdb->update(
+	            $page_language_relations,
+	            array( "page_language" => $language ),
+	            array( "page_id" => $page_id )
+	        );
+		} else { return false; }
     }
 
     /*
@@ -333,21 +349,23 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function is called via AJAX request from the front-end. It returns the Edit link of the specified by $_POST[ "page_id" ], Page.
     */
     function get_page_url() {
-        $current_page_id = $_POST[ "current_page_id" ];
-        $current_page_language = $_POST[ "current_page_language" ];
-        $page_id = $_POST[ "page_id" ];
-        $parent_id = $_POST[ "parent_id" ];
-        $language = $_POST[ "language" ];
+        $current_page_id = intval( $_POST[ "current_page_id" ] );
+        $current_page_language = sanitize_text_field( $_POST[ "current_page_language" ] );
+        $page_id = intval( $_POST[ "page_id" ] );
+        $parent_id = intval( $_POST[ "parent_id" ] );
+        $language = sanitize_text_field( $_POST[ "language" ] );
 
-        if ( $current_page_language != "none" ) {
-            if ( $page_id == -1 ) { // The desired translation of a page is missing, so let's create it!
-                $page_id = $this->duplicate_post( $current_page_id, $language );
-                update_post_meta( $page_id, "page_language", $language );
-                $this->insert_language_relation( $page_id, $parent_id == -1 ? $current_page_id : $parent_id, $language );
-            }
-        } else { $page_id = $current_page_id; }
+		if ( is_int( $current_page_id ) && is_int( $page_id ) && is_int( $parent_id ) ) {
+	        if ( $current_page_language != "none" ) {
+	            if ( $page_id == -1 ) { // The desired translation of a page is missing, so let's create it!
+	                $page_id = $this->duplicate_post( $current_page_id, $language );
+	                update_post_meta( $page_id, "page_language", $language );
+	                $this->insert_language_relation( $page_id, $parent_id == -1 ? $current_page_id : $parent_id, $language );
+	            }
+	        } else { $page_id = $current_page_id; }
 
-        echo html_entity_decode( get_edit_post_link( $page_id, "display" ) );
+	        echo html_entity_decode( get_edit_post_link( $page_id, "display" ) );
+		} else { echo false; }
 
         die();
     }
@@ -358,81 +376,85 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function duplicates a post :OOO
     */
     function duplicate_post( $post_id, $language ){
-    	global $wpdb;
+		if ( intval( $post_id ) ) {
+			$language = sanitize_text_field( $language );
 
-    	/*
-    	 * Get all the original post data then
-    	 */
-    	$post = get_post( $post_id );
+			global $wpdb;
 
-    	/*
-    	 * if you don't want current user to be the new post author,
-    	 * then change next couple of lines to this: $new_post_author = $post->post_author;
-    	 */
-    	$current_user = wp_get_current_user();
-    	$new_post_author = $current_user->ID;
+	    	/*
+	    	 * Get all the original post data then
+	    	 */
+	    	$post = get_post( $post_id );
 
-        // Get parent title
-        $parent_title = get_the_title( $this->get_parent_id( $post_id ) );
+	    	/*
+	    	 * if you don't want current user to be the new post author,
+	    	 * then change next couple of lines to this: $new_post_author = $post->post_author;
+	    	 */
+	    	$current_user = wp_get_current_user();
+	    	$new_post_author = $current_user->ID;
 
-    	/*
-    	 * if post data exists, create the post duplicate
-    	 */
-    	if (isset( $post ) && $post != null) {
+	        // Get parent title
+	        $parent_title = get_the_title( $this->get_parent_id( $post_id ) );
 
-    		/*
-    		 * new post data array
-    		 */
-    		$args = array(
-    			'comment_status' => $post->comment_status,
-    			'ping_status'    => $post->ping_status,
-    			'post_author'    => $new_post_author,
-    			'post_content'   => $post->post_content,
-    			'post_excerpt'   => $post->post_excerpt,
-    			'post_name'      => $post->post_name,
-    			'post_parent'    => $post->post_parent,
-    			'post_password'  => $post->post_password,
-    			'post_status'    => 'draft',
-    			'post_title'     => $parent_title,
-                'post_name'      => sanitize_title( $parent_title ) ."-". $language,
-    			'post_type'      => $post->post_type,
-    			'to_ping'        => $post->to_ping,
-    			'menu_order'     => $post->menu_order
-    		);
+	    	/*
+	    	 * if post data exists, create the post duplicate
+	    	 */
+	    	if (isset( $post ) && $post != null) {
 
-    		/*
-    		 * insert the post by wp_insert_post() function
-    		 */
-    		$new_post_id = wp_insert_post( $args );
+	    		/*
+	    		 * new post data array
+	    		 */
+	    		$args = array(
+	    			'comment_status' => $post->comment_status,
+	    			'ping_status'    => $post->ping_status,
+	    			'post_author'    => $new_post_author,
+	    			'post_content'   => $post->post_content,
+	    			'post_excerpt'   => $post->post_excerpt,
+	    			'post_name'      => $post->post_name,
+	    			'post_parent'    => $post->post_parent,
+	    			'post_password'  => $post->post_password,
+	    			'post_status'    => 'draft',
+	    			'post_title'     => $parent_title,
+	                'post_name'      => sanitize_title( $parent_title ) ."-". $language,
+	    			'post_type'      => $post->post_type,
+	    			'to_ping'        => $post->to_ping,
+	    			'menu_order'     => $post->menu_order
+	    		);
 
-    		/*
-    		 * get all current post terms ad set them to the new post draft
-    		 */
-    		$taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
-    		foreach ($taxonomies as $taxonomy) {
-    			$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
-    			wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
-    		}
+	    		/*
+	    		 * insert the post by wp_insert_post() function
+	    		 */
+	    		$new_post_id = wp_insert_post( $args );
 
-    		/*
-    		 * duplicate all post meta just in two SQL queries
-    		 */
-    		$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
-    		if (count($post_meta_infos)!=0) {
-    			$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
-    			foreach ($post_meta_infos as $meta_info) {
-    				$meta_key = $meta_info->meta_key;
-    				$meta_value = addslashes($meta_info->meta_value);
-    				$sql_query_sel[]= "SELECT $new_post_id, '$meta_key', '$meta_value'";
-    			}
-    			$sql_query.= implode(" UNION ALL ", $sql_query_sel);
-    			$wpdb->query($sql_query);
-    		}
+	    		/*
+	    		 * get all current post terms ad set them to the new post draft
+	    		 */
+	    		$taxonomies = get_object_taxonomies($post->post_type); // returns array of taxonomy names for post type, ex array("category", "post_tag");
+	    		foreach ($taxonomies as $taxonomy) {
+	    			$post_terms = wp_get_object_terms($post_id, $taxonomy, array('fields' => 'slugs'));
+	    			wp_set_object_terms($new_post_id, $post_terms, $taxonomy, false);
+	    		}
 
-            return $new_post_id;
-    	} else {
-    		wp_die('Post creation failed, could not find original post: ' . $post_id);
-    	}
+	    		/*
+	    		 * duplicate all post meta just in two SQL queries
+	    		 */
+	    		$post_meta_infos = $wpdb->get_results("SELECT meta_key, meta_value FROM $wpdb->postmeta WHERE post_id=$post_id");
+	    		if (count($post_meta_infos)!=0) {
+	    			$sql_query = "INSERT INTO $wpdb->postmeta (post_id, meta_key, meta_value) ";
+	    			foreach ($post_meta_infos as $meta_info) {
+	    				$meta_key = $meta_info->meta_key;
+	    				$meta_value = addslashes($meta_info->meta_value);
+	    				$sql_query_sel[]= "SELECT $new_post_id, '$meta_key', '$meta_value'";
+	    			}
+	    			$sql_query.= implode(" UNION ALL ", $sql_query_sel);
+	    			$wpdb->query($sql_query);
+	    		}
+
+	            return $new_post_id;
+	    	} else {
+	    		wp_die('Post creation failed, could not find original post: ' . $post_id);
+	    	}
+		}
     }
 
     /*
@@ -441,11 +463,15 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function is used to remove the relation between Page and Parent when the page is removed.
     */
     function clear_page_language_relations( $post_id ) {
-        global $wpdb;
+		if ( intval( $post_id ) ) {
+	        global $wpdb;
 
-        $page_language_relations = $wpdb->prefix ."page_language_relations";
+	        $page_language_relations = $wpdb->prefix ."page_language_relations";
 
-        $wpdb->query( "DELETE FROM $page_language_relations WHERE page_id=$post_id OR page_parent_id=$post_id" );
+	        $wpdb->query(
+				$wpdb->prepare( "DELETE FROM $page_language_relations WHERE page_id=%d OR page_parent_id=%d", $post_id )
+			);
+		}
     }
 
     /*
