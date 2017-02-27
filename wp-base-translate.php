@@ -173,7 +173,7 @@ class WP_BASE_TRANSLATE {
             <?php
             }
         ?>
-        </select
+		</select>
         <?php
     }
 

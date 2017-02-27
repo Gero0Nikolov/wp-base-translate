@@ -21,7 +21,7 @@ jQuery( document ).ready(function(){
                         language : language
             		},
             		success : function( response ) {
-                        window.location = response;
+						window.location = response;
                     }
             	});
             } );
