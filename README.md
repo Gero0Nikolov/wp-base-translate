@@ -41,7 +41,7 @@ That is the only thing, you'll have to do on your own, if you don't use differen
 
 ###How to build the Language listing menu?
 Since the plugin doesn't provide a hardcoded menu, it provides a very flexible back-end method for implementing it with your website.
-The core of the plugin gives you a function called <strong>get_registered_languages()</strong> which returns an <strong>Array</strong> of <strong>Objects</strong> which represent the registered <strong>Language objects</strong>.
+The core of the plugin gives you a function called <strong>wpbt_get_registered_languages()</strong> which returns an <strong>Array</strong> of <strong>Objects</strong> which represent the registered <strong>Language objects</strong>.
 
 Every language object has:
 - Language ID: That's the ID of the Post in the database
@@ -52,7 +52,7 @@ Every language object has:
 - Language Author: That's the ID of the Administrator who created the language in your WordPress installation.
 - Language Icon: That's the link to the language icon, which was selected from the WP Dashboard. Usually it's the flag of the <strong>Parent Country of the language</strong>.
 
-The <strong>get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
+The <strong>wpbt_get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
 
 ##How to contribute?
 You just have to clone the repository and build!
