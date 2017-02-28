@@ -15,10 +15,12 @@ Most of the translation plugins are built in very complicated and messy way...
 That's why with WP_BASE_TRANSLATE you can <strong>create</strong>, <strong>edit</strong> or <strong>remove</strong> new languages in just a few clicks!
 
 When the plugin is installed it performs the following things:
-- Registers the <strong>Language Custom Post Type (CPT)</strong>
-- Creates the <strong>_WP_PREFIX_page_language_relations</strong> table in your installation Database
-- Adds page language metabox to Post / Page (it works with all CPTs as well)
-- Adds avalilable languages metabox on which your page can be translated
+<ul>
+<li>Registers the <strong>Language Custom Post Type (CPT)</strong></li>
+<li>Creates the <strong>_WP_PREFIX_page_language_relations</strong> table in your installation Database</li>
+<li>Adds page language metabox to Post / Page (it works with all CPTs as well)</li>
+<li>Adds avalilable languages metabox on which your page can be translated</li>
+</ul>
 
 <h1>How to add a new language?</h1>
 The languages are registered in your database as Posts from <strong>Language CPT</strong>.
@@ -43,28 +45,31 @@ The only requirement for the plugin to work properly is to add <em><strong>lang<
 
 <h2>What happens if I don't have that language implementation in my site?</h2>
 WP_BASE_TRANSLATE don't come with built in language listing menu for the front-end, because of several reasons:
-- Every website has it's unique design. That's why we can't build a universal language menu that will fit perfect for your idea.
-- Everybodys taste is different. Some of us like the language menu to be at the top, others like it at the bottom. That's why we don't want to <em>"put you in a box"</em> with a hardcoded functionality.
+<ul>
+<li>Every website has it's unique design. That's why we can't build a universal language menu that will fit perfect for your idea.</li>
+<li>Everybodys taste is different. Some of us like the language menu to be at the top, others like it at the bottom. That's why we don't want to <em>"put you in a box"</em> with a hardcoded functionality.</li>
+</ul>
 
 <h2>How to build the Language listing menu?</h2>
 Since the plugin doesn't provide a hardcoded menu, it provides a very flexible back-end method for implementing it with your website.
 The core of the plugin gives you a function called <strong>get_registered_languages()</strong> which returns an <strong>Array</strong> of <strong>Objects</strong> which represent the registered <strong>Language objects</strong>.
 
 Every language object has:
-- Language ID: That's the ID of the Post in the database
-- Language Name: That's the Title of the Post
-- Language Code: That's the small version of your language title, for example if you have <strong>EN</strong> as title, the code will be <strong>en</strong>. In the navigation menu you should use it as value of the <strong>lang</strong> parameter.
-- Language Slug: That's the post slug you've choosed from the WordPress Dashboard. By default it's smaller version of the title equal to the <strong>Language Code</strong>
-- Language Link: That's the permalink of the <strong>Language Post Object</strong>.
-- Language Author: That's the ID of the Administrator who created the language in your WordPress installation.
-- Language Icon: That's the link to the language icon, which was selected from the WP Dashboard. Usually it's the flag of the <strong>Parent Country of the language</strong>.
+<ul>
+<li>Language ID: That's the ID of the Post in the database</li>
+<li>Language Name: That's the Title of the Post</li>
+<li>Language Code: That's the small version of your language title, for example if you have <strong>EN</strong> as title, the code will be <strong>en</strong>. In the navigation menu you should use it as value of the <strong>lang</strong> parameter.</li>
+<li>Language Slug: That's the post slug you've choosed from the WordPress Dashboard. By default it's smaller version of the title equal to the <strong>Language Code</strong></li>
+<li>Language Link: That's the permalink of the <strong>Language Post Object</strong>.</li>
+<li>Language Author: That's the ID of the Administrator who created the language in your WordPress installation.</li>
+<li>Language Icon: That's the link to the language icon, which was selected from the WP Dashboard. Usually it's the flag of the <strong>Parent Country of the language</strong>.</li>
+</ul>
 
 The <strong>get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
 
 <h1>How to contribute?</h1>
 You just have to clone the repository and build!
 
-If you want to extend the <strong>functions.php</strong> file, make sure to wrap your <em><strong>new functions</strong></em> in the <strong>if ( !function_exists( "" ) ) {}</strong> statement.
 If you want to extend the <strong>WP_BASE_TRANSLATE Core</strong> make sure to add small comment block above each of your functions.
 
 <strong>The code block should look like:</strong>
