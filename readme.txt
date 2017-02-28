@@ -79,6 +79,11 @@ function example_function( $post_id ) { return "John Snow is alive!"; }
 
 <a href="https://github.com/Gero0Nikolov/wp-base-translate" target="_blank">Join the contributions!</a>
 
+== Screenshots ==
+1. Language registering
+2. Page setup
+3. Translated Page setup
+
 == Installation ==
 
 This section describes how to install the plugin and get it working.
@@ -89,5 +94,3 @@ e.g.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 1. Use the Settings->Plugin Name screen to configure the plugin
 1. (Make your instructions match the desired user flow for activating and installing your plugin. Include any steps that might be needed for explanatory purposes)
-
-== Screenshots ==
