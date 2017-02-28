@@ -57,7 +57,6 @@ The <strong>wpbt_get_registered_languages()</strong> function can be found in th
 ##How to contribute?
 You just have to clone the repository and build!
 
-If you want to extend the <strong>functions.php</strong> file.<br>
 If you want to extend the <strong>WP_BASE_TRANSLATE Core</strong> make sure to add small comment block above each of your functions.
 
 <strong>The code block should look like:</strong>
