@@ -18,7 +18,8 @@ class WP_BASE_TRANSLATE {
         // Register the Languages CPT
         add_action( "init", array( $this, "register_languages_cpt" ) );
 
-        add_action( "wp", array( $this, "redirect_to_translation" ), 10 );
+	// Register redirect method 
+	add_action( "wp", array( $this, "redirect_to_translation" ), 10 );
 
         // Register scripts and styles for the Back-end part
         add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_js' ), "1.0.0", "true" );
