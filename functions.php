@@ -16,6 +16,7 @@ function wpbt_get_registered_languages() {
         $language_container = new stdClass();
         $language_container->ID = $language_->ID;
         $language_container->name = $language_->post_title;
+		$language_container->full_name = get_post_meta( $language_->ID, "language_name", true );
         $language_container->code = strtolower( $language_->post_title );
         $language_container->slug = $language_->post_name;
         $language_container->link = get_permalink( $language_->ID );
