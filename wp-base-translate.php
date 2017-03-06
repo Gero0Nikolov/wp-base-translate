@@ -144,11 +144,16 @@ class WP_BASE_TRANSLATE {
         );
     }
 
+    /*
+    *   Function name: build_language_name_metabox
+    *   Function arguments: NONE
+    *   Function purpose: This function is used to build the Full language name metabox.
+    */
     function build_language_name_metabox() {
         global $post;
         ?>
 
-        <input type="text" placeholder="Language full name..." class="widefat" id="language-name" name="language_name" value="<?php echo isset( $post->language_name ) && !empty( $post->language_name ) ? $post->language_name : ""; ?>">
+        <input type="text" placeholder="Full language name..." class="widefat" id="language-name" name="language_name" value="<?php echo isset( $post->language_name ) && !empty( $post->language_name ) ? $post->language_name : ""; ?>">
         <input type="hidden" value="<?php echo $post->post_title; ?>" name="current_language_title">
 
         <?php
