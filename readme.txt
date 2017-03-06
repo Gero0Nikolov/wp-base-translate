@@ -4,7 +4,7 @@ Donate link: http://geronikolov.com
 Tags: translation, translating, translate, simple, modern
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: 1.0
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,7 @@ Every language object has:
 <li>Language ID: That's the ID of the Post in the database</li>
 <li>Language Name: That's the Title of the Post</li>
 <li>Language Code: That's the small version of your language title, for example if you have <strong>EN</strong> as title, the code will be <strong>en</strong>. In the navigation menu you should use it as value of the <strong>lang</strong> parameter.</li>
+<li>Language Full Name: That's the full name of the language. Example: EN = English; ES = Espanol;</li>
 <li>Language Slug: That's the post slug you've choosed from the WordPress Dashboard. By default it's smaller version of the title equal to the <strong>Language Code</strong></li>
 <li>Language Link: That's the permalink of the <strong>Language Post Object</strong>.</li>
 <li>Language Author: That's the ID of the Administrator who created the language in your WordPress installation.</li>

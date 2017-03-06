@@ -47,6 +47,7 @@ Every language object has:
 - Language ID: That's the ID of the Post in the database
 - Language Name: That's the Title of the Post
 - Language Code: That's the small version of your language title, for example if you have <strong>EN</strong> as title, the code will be <strong>en</strong>. In the navigation menu you should use it as value of the <strong>lang</strong> parameter.
+- Language Full Name: That's the full name of the language. Example: EN = English; ES = Espanol;
 - Language Slug: That's the post slug you've choosed from the WordPress Dashboard. By default it's smaller version of the title equal to the <strong>Language Code</strong>
 - Language Link: That's the permalink of the <strong>Language Post Object</strong>.
 - Language Author: That's the ID of the Administrator who created the language in your WordPress installation.
