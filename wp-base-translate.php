@@ -18,8 +18,8 @@ class WP_BASE_TRANSLATE {
         // Register the Languages CPT
         add_action( "init", array( $this, "register_languages_cpt" ) );
 
-	// Register redirect method 
-	add_action( "wp", array( $this, "redirect_to_translation" ), 10 );
+    	// Register redirect method
+    	add_action( "wp", array( $this, "redirect_to_translation" ), 10 );
 
         // Register scripts and styles for the Back-end part
         add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_js' ), "1.0.0", "true" );
@@ -30,6 +30,9 @@ class WP_BASE_TRANSLATE {
 
         // Register the Avaliable Languages Metabox for all CPTs
         add_action( "add_meta_boxes", array( $this, "register_languages_metabox" ), 10, 2 );
+
+        // Register the Language Name Metabox for the Languages CPT
+        add_action( "add_meta_boxes", array( $this, "register_language_name_metabox" ), 10, 2 );
 
         // Register On Update event
         add_action( "save_post", array( $this, "action_on_update" ) );
@@ -123,6 +126,32 @@ class WP_BASE_TRANSLATE {
         );
 
         register_post_type( "language", $args );
+    }
+
+    /*
+    *   Function name: register_language_name_metabox
+    *   Function arguments: NONE [ $post_type, $post - NOT USED ]
+    *   Function purpose: This function is used to generate the WP_BASE_TRANSLATE_LANGUAGE_NAME meta box for the Languages CPT.
+    */
+    function register_language_name_metabox( $post_type, $post ) {
+        add_meta_box(
+            "wp_base_translate_page_language",
+            "Language Name",
+            array( $this, "build_language_name_metabox" ),
+            "language",
+            "normal",
+            "high"
+        );
+    }
+
+    function build_language_name_metabox() {
+        global $post;
+        ?>
+
+        <input type="text" placeholder="Language full name..." class="widefat" id="language-name" name="language_name" value="<?php echo isset( $post->language_name ) && !empty( $post->language_name ) ? $post->language_name : ""; ?>">
+        <input type="hidden" value="<?php echo $post->post_title; ?>" name="current_language_title">
+
+        <?php
     }
 
     /*
@@ -248,17 +277,48 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function is used to save the language of the current page, when the "Update" button is clicked.
     */
     function action_on_update( $post_id ) {
-		$page_language = isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) ? sanitize_text_field( $_POST[ "page_language" ] ) : "";
+        if ( $_POST[ "post_type" ] != "language" ) {
+    		$page_language = isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) ? sanitize_text_field( $_POST[ "page_language" ] ) : "";
 
-		$current_page_language = get_post_meta( $post_id, "page_language", true );
-        if ( empty( $current_page_language ) ) { if ( isset( $page_language ) && !empty( $page_language ) ) { add_post_meta( $post_id, "page_language", $page_language, true ); } }
-        else { update_post_meta( $post_id, "page_language", $page_language ); }
+    		$current_page_language = get_post_meta( $post_id, "page_language", true );
+            if ( empty( $current_page_language ) ) { if ( isset( $page_language ) && !empty( $page_language ) ) { add_post_meta( $post_id, "page_language", $page_language, true ); } }
+            else { update_post_meta( $post_id, "page_language", $page_language ); }
 
-        if ( $this->get_parent_id( $post_id ) == -1 ) {
-            if ( isset( $page_language ) && !empty( $page_language ) && $page_language != "none" ) {
-                $this->insert_language_relation( $post_id, $post_id, $page_language );
-            }
-        } else { $this->update_language_relation( $post_id, $page_language ); }
+            if ( $this->get_parent_id( $post_id ) == -1 ) {
+                if ( isset( $page_language ) && !empty( $page_language ) && $page_language != "none" ) {
+                    $this->insert_language_relation( $post_id, $post_id, $page_language );
+                }
+            } else { $this->update_language_relation( $post_id, $page_language ); }
+        } else {
+            $language_name = isset( $_POST[ "language_name" ] ) && !empty( $_POST[ "language_name" ] ) ? $_POST[ "language_name" ] : "";
+            $current_language_name = get_post_meta( $post_id, "language_name", true );
+            if ( empty( $current_language_name ) ) { if ( isset( $language_name ) && !empty( $language_name ) ) { add_post_meta( $post_id, "language_name", $language_name ); } }
+            else { update_post_meta( $post_id, "language_name", $language_name ); }
+
+            $current_language_code = sanitize_text_field( strtolower( $_POST[ "current_language_title" ] ) );
+            $language_code = sanitize_text_field( strtolower( $_POST[ "post_title" ] ) );
+
+            global $wpdb;
+            $wpdb->update(
+                $wpdb->prefix ."page_language_relations",
+                array(
+                    "page_language" => $language_code
+                ),
+                array (
+                    "page_language" => $current_language_code
+                )
+            );
+
+            $wpdb->update(
+                $wpdb->prefix ."postmeta",
+                array (
+                    "meta_value" => $language_code
+                ),
+                array (
+                    "meta_value" => $current_language_code
+                )
+            );
+        }
     }
 
     /*
