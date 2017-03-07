@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Base Translate
 Description: This plugin is used to translate Posts, Pages & every other elements from CPT.
-Version: 1.1
+Version: 2.0
 Author: GeroNikolov
 Author URI: http://geronikolov.com
 License: GPLv2
