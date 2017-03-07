@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Base Translate
 Description: This plugin is used to translate Posts, Pages & every other elements from CPT.
-Version: 1.0
+Version: 1.1
 Author: GeroNikolov
 Author URI: http://geronikolov.com
 License: GPLv2
@@ -282,7 +282,7 @@ class WP_BASE_TRANSLATE {
     *   Function purpose: This function is used to save the language of the current page, when the "Update" button is clicked.
     */
     function action_on_update( $post_id ) {
-        if ( $_POST[ "post_type" ] != "language" ) {
+        if ( !isset( $_POST[ "post_type" ] ) || $_POST[ "post_type" ] != "language" ) {
     		$page_language = isset( $_POST[ "page_language" ] ) && !empty( $_POST[ "page_language" ] ) ? sanitize_text_field( $_POST[ "page_language" ] ) : "";
 
     		$current_page_language = get_post_meta( $post_id, "page_language", true );
