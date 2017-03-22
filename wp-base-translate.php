@@ -18,6 +18,9 @@ class WP_BASE_TRANSLATE {
         // Register the Languages CPT
         add_action( "init", array( $this, "register_languages_cpt" ) );
 
+        // Register the shortcode which is going to show the languages menu
+		add_action( 'init', array( $this, 'register_shortcode' ) );
+
     	// Register redirect method
     	add_action( "wp", array( $this, "redirect_to_translation" ), 10 );
 
@@ -561,6 +564,40 @@ class WP_BASE_TRANSLATE {
                 }
             }
         }
+    }
+
+    /*
+    *   Function name: register_shortcode
+    *   Function arguments: NONE
+    *   Function purpose: This function is used to register the [language_menu] shortcode.
+    */
+    function register_shortcode() { add_shortcode( "language_menu", array( $this, "get_language_menu" ) ); }
+
+    /*
+    *   Function name: get_language_menu
+    *   Function arguments: $atts [MIXED_ARRAY] [NOT_USED]
+    *   Function purpose: This function will register the language menu on every Post / Page or Single CPT where the [language_menu] shortcode is called.
+    */
+    function get_language_menu( $atts ) {
+        global $post;
+        $page_language = get_post_meta( $post->ID, "page_language", true );
+
+        $languages_ = wpbt_get_registered_languages();
+
+        $browse_language = isset( $_GET[ "lang" ] ) && !empty( $_GET[ "lang" ] ) ? $_GET[ "lang" ] : $page_language;
+
+        $dropdown = "<select id='languages' class='languages'>";
+        foreach( $languages_ as $language_ ) {
+            $language_name = isset( $language_->full_name ) && !empty( $language_->full_name ) ? $language_->full_name : $language_->name;
+            $is_selected = $browse_language == $language_->code ? "selected" : "";
+            $dropdown .= "<option value='". get_permalink( $post->ID ) ."?lang=". $language_->code ."' ". $is_selected .">". $language_name ."</option>";
+        }
+        $dropdown .= "</select>";
+
+        // Attach the simple JS event
+        $dropdown .= "<script type='text/javascript'>jQuery(document).ready(function(){jQuery('#languages').on('change',function(){window.location=jQuery(this).find(':selected').attr('value');});});</script>";
+
+        return $dropdown;
     }
 }
 
