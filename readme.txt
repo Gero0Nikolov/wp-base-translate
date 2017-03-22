@@ -66,7 +66,7 @@ Every language object has:
 <li>Language Icon: That's the link to the language icon, which was selected from the WP Dashboard. Usually it's the flag of the <strong>Parent Country of the language</strong>.</li>
 </ul>
 
-The <strong>get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
+The <strong>wpbt_get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
 
 <h1>How to contribute?</h1>
 You just have to clone the repository and build!
