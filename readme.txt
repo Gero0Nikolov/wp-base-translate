@@ -4,7 +4,7 @@ Donate link: http://geronikolov.com
 Tags: translation, translating, translate, simple, modern
 Requires at least: 3.1
 Tested up to: 4.7
-Stable tag: 2.0
+Stable tag: 3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,11 +44,8 @@ The only requirement for the plugin to work properly is to add <em><strong>lang<
 <strong>Example:</strong> http://geronikolov.com/blog ---> http://geronikolov.com/blog?lang=bg (that will call the Blog page translated in <u>Bulgarian</u>)
 
 <h2>What happens if I don't have that language implementation in my site?</h2>
-WP_BASE_TRANSLATE don't come with built in language listing menu for the front-end, because of several reasons:
-<ul>
-<li>Every website has it's unique design. That's why we can't build a universal language menu that will fit perfect for your idea.</li>
-<li>Everybodys taste is different. Some of us like the language menu to be at the top, others like it at the bottom. That's why we don't want to <em>"put you in a box"</em> with a hardcoded functionality.</li>
-</ul>
+WP_BASE_TRANSLATE gives you a simple language dropdown menu, which can be placed everywhere you want it!
+Do add to your Posts, Pages or Code, just use this shortcode - <strong>[language_menu]</strong>
 
 <h2>How to build the Language listing menu?</h2>
 Since the plugin doesn't provide a hardcoded menu, it provides a very flexible back-end method for implementing it with your website.
