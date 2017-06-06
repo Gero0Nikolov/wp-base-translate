@@ -29,4 +29,18 @@ function wpbt_get_registered_languages() {
     return $languages_container;
 }
 
+function wpbt_get_translation_id( $page_id, $language_code ) {
+    $page_id = intval( $page_id );
+    $language_code = sanitize_text_field( $language_code );
+
+    if ( is_int( $page_id ) && $page_id > 0 ) {
+        $wp_base_translate = new WP_BASE_TRANSLATE;
+
+        $translations_parent_id = $wp_base_translate->get_parent_id( $page_id );
+        $translation_id = $wp_base_translate->get_child_id( $translations_parent_id, $language_code );
+
+        return $translation_id != -1 ? $translation_id : $translations_parent_id;
+    } else { return false; }
+}
+
 ?>
