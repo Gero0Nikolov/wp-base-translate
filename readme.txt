@@ -3,8 +3,8 @@ Contributors: geronikolov
 Donate link: http://geronikolov.com
 Tags: translation, translating, translate, simple, modern
 Requires at least: 3.1
-Tested up to: 4.7
-Stable tag: 3.0
+Tested up to: 4.8
+Stable tag: 3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,10 @@ Every language object has:
 </ul>
 
 The <strong>wpbt_get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
+
+Functions list: functions.php
+wpbt_get_registered_languages()
+wpbt_get_translation_id()
 
 <h1>How to contribute?</h1>
 You just have to clone the repository and build!

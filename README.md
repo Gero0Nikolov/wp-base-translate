@@ -55,6 +55,10 @@ Every language object has:
 
 The <strong>wpbt_get_registered_languages()</strong> function can be found in the <strong>functions.php</strong> file positioned in the root folder of the plugin.
 
+Functions list: functions.php
+wpbt_get_registered_languages()
+wpbt_get_translation_id()
+
 ##How to contribute?
 You just have to clone the repository and build!
 
