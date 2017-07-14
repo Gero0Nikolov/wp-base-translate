@@ -37,6 +37,9 @@ class WP_BASE_TRANSLATE {
         // Register the Language Name Metabox for the Languages CPT
         add_action( "add_meta_boxes", array( $this, "register_language_name_metabox" ), 10, 2 );
 
+        // Add action on the Admin Screen to hide all pages which are translations
+        add_action( "pre_get_posts", array( $this, "clear_translations_page" ) );
+
         // Register On Update event
         add_action( "save_post", array( $this, "action_on_update" ) );
 
@@ -553,15 +556,11 @@ class WP_BASE_TRANSLATE {
             $page_id = get_the_ID();
             $language_ = trim( strtolower( $_GET[ "lang" ] ) );
 
-            $this_parent_id = $this->get_parent_id( $page_id );
+            $translation_id = wpbt_get_translation_id( $page_id, $language_ );
 
-            if ( $this_parent_id != -1 ) {
-                $page_translated_id = $this->get_child_id( $this_parent_id, $language_ );
-
-                if ( $page_id != $page_translated_id && $page_translated_id != -1 ) {
-                    wp_redirect( get_permalink( $page_translated_id ) ."?lang=". $language_ );
-                    exit;
-                }
+            if ( $page_id != $translation_id ) {
+                wp_redirect( get_permalink( $translation_id ) ."?lang=". $language_ );
+                exit;
             }
         }
     }
@@ -598,6 +597,34 @@ class WP_BASE_TRANSLATE {
         $dropdown .= "<script type='text/javascript'>jQuery(document).ready(function(){jQuery('#languages').on('change',function(){window.location=jQuery(this).find(':selected').attr('value');});});</script>";
 
         return $dropdown;
+    }
+
+    /*
+    *   Function name: clear_translations_page
+    *   Function arguments: $query [MIXED_ARRAY]
+    *   Function purpose: This function will remove the translated pages from the Pages admin screen.
+    */
+    function clear_translations_page( $query ) {
+        if ( !is_admin() ) { return $query; }
+
+        global $pagenow;
+        if ( $pagenow == "edit.php" && ( get_query_var( "post_type" ) && get_query_var( "post_type" ) == "page" ) && get_query_var( "s" ) == null ) {
+            global $wpdb;
+
+            $page_language_relations = $wpdb->prefix ."page_language_relations";
+            $sql_ = "
+            SELECT page_id, page_parent_id
+            FROM $page_language_relations AS plr
+            WHERE page_id != page_parent_id
+            ";
+            $results_ = $wpdb->get_results( $sql_, OBJECT );
+
+            $exclude_page_ids = array();
+            foreach ( $results_ as $result_ ) { array_push( $exclude_page_ids, $result_->page_id ); }
+
+            $query->set( "post__not_in", $exclude_page_ids );
+            return $query;
+        }
     }
 }
 
