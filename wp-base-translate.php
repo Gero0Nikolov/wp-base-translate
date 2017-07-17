@@ -559,7 +559,7 @@ class WP_BASE_TRANSLATE {
             $translation_id = wpbt_get_translation_id( $page_id, $language_ );
 
             if ( $page_id != $translation_id ) {
-                wp_redirect( get_permalink( $translation_id ) ."?lang=". $language_ );
+                wp_redirect( get_permalink( $translation_id ) ."?". $_SERVER[ "QUERY_STRING" ] );
                 exit;
             }
         }
