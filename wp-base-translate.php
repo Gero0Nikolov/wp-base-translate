@@ -264,15 +264,17 @@ class WP_BASE_TRANSLATE {
         <?php
         foreach ( $languages_ as $language_ ) {
             $active_language = "";
+            $translated_language = "";
 
             if ( isset( $post->page_language ) && strtolower( $language_->post_title ) == $post->page_language ) {
                 $page_id = $post->ID;
                 $active_language = "active";
             } else {
                 $page_id = $this->get_child_id( $page_parent_id, strtolower( $language_->post_title ) );
+                $translated_language = $page_id > -1 ? "translated" : "";
             }
         ?>
-            <button id="language-<?php echo $language_->ID; ?>" current-page-id="<?php echo $post->ID; ?>" page-id="<?php echo $page_id; ?>" parent-id="<?php echo $page_parent_id; ?>" language="<?php echo strtolower( $language_->post_title ); ?>" class="language-option <?php echo $active_language; ?>" type="button">
+            <button id="language-<?php echo $language_->ID; ?>" current-page-id="<?php echo $post->ID; ?>" page-id="<?php echo $page_id; ?>" parent-id="<?php echo $page_parent_id; ?>" language="<?php echo strtolower( $language_->post_title ); ?>" class="language-option <?php echo $active_language ." ". $translated_language; ?>" type="button">
                 <?php echo $language_->post_title; ?>
             </button>
         <?php
